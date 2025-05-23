@@ -1,0 +1,88 @@
+# box properties 
+ 
+space_dimension = 1
+
+space_confinement = abox
+
+
+
+ 
+# other options are like: abox, pcylinder, acylinder, asphere which is for the purpose of the aperiodic wall etc...
+
+box_extension = 46, 25, 45
+
+box_points = 500, 100, 100
+
+
+
+
+# in case of aperiodic boundary condition with the particles confined within the wall
+
+aperiodicity_blocker: wall
+# here you can also define "na", "NA" or "none"
+
+wall: particles = d
+wall: position  = (0, 0, 0), (46, 0, 0) 
+wall: orientation  = (1, 0, 0), (1, 0, 0)
+
+
+
+# particles properties 
+
+particle_types = "cgrained"
+
+species =  a , b,  c 
+
+species_canonical_fraction = 0.185185, 0.185185, 0.09259
+
+
+
+
+
+# between the same pairs the maximum possible interaction is limited to only three kinds of potential... so please first reduce your problem to a configuration where maximum three kinds of potentials are defined for a single kind of pair...
+
+# you can put the potential in any hierarchy, however for the easy perception it has been divided and putted in the three sections given as ...
+
+
+
+# primary interactions
+
+interaction: aa = gs,  sigma = 1.4, cutoff = 3.5, epsilon = 2.0
+interaction: ab = gs,  sigma = 1.4, cutoff = 3.5, epsilon = 2.5
+interaction: ac = gs,  sigma = 1.000, cutoff = 3.5, epsilon = -0.3575
+interaction: bb = gs,  sigma = 1.4, cutoff = 3.5, epsilon = 2.0
+interaction: cc = hc,  sigma = 0.9, cutoff = 5, epsilon = 2.0
+
+
+
+wall_interaction: ad = custom_3,  sigma = 0.9333, cutoff = 3.2, epsilon=0.1 
+wall_interaction: bd = custom_3,  sigma = 0.9333, cutoff = 3.2, epsilon=0.1
+wall_interaction: cd = custom_3,  sigma = 0.9333, cutoff = 3.2, epsilon=0.1
+
+
+# b is the wall particle 
+
+#secondary interactions
+
+#interaction: aa = wca,  sigma = 1.2, cutoff = 3.2, epsilon=1.0
+
+
+
+interaction: aa = ghc,  sigma = 0.95, cutoff = 3.2, epsilon=2
+interaction: bb = ghc,  sigma = 0.95, cutoff = 3.2, epsilon=2
+
+# thermodynamic properties
+
+temperature = 1
+
+# in kelvin
+
+rho = 0.6885
+
+secondary_rho = 0.4332
+
+# in the reduced unit
+
+iteration_max = 50000
+
+# maximum number of iteration 
