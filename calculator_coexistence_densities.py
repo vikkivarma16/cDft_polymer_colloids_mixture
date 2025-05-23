@@ -51,6 +51,7 @@ def calculator_coexistence_densities():
         i = 0 
         j = 0
         grand_rosenfeld_flag = 0
+        grand_meanfield_flag = 0
         
         for species_type, rho_value in species.items():
             
@@ -95,6 +96,7 @@ def calculator_coexistence_densities():
                         exit(0)
                         
                 else :
+                    grand_meanfield_flag = 1
                     interaction_type_ij[i][j] = interaction_type
                     epsilonij[i][j] = epsilon
                     sigmaij[i][j] = sigma_ij
@@ -143,6 +145,7 @@ def calculator_coexistence_densities():
                         exit(0)
                         
                 else :
+                    grand_meanfield_flag = 1
                     interaction_type_ij[i][j] = interaction_type
                     epsilonij[i][j] = epsilon
                     sigmaij[i][j] = sigma_ij
@@ -185,6 +188,7 @@ def calculator_coexistence_densities():
                         exit(0)
                         
                 else :
+                    grand_meanfield_flag = 1
                     interaction_type_ij[i][j] = interaction_type
                     epsilonij[i][j] = epsilon
                     sigmaij[i][j] = sigma_ij
@@ -194,10 +198,10 @@ def calculator_coexistence_densities():
             # Store the total chemical potential for the species
             i = i+1
             
-        return species, epsilonij, sigmaij, interaction_type_ij, sigmai_p, grand_rosenfeld_flag, flag
+        return species, epsilonij, sigmaij, interaction_type_ij, sigmai_p, grand_rosenfeld_flag, grand_meanfield_flag, flag
 
 
-    def canonical_coexistence(species, epsilonij, sigmaij, interaction_type_ij, sigmai_p, grand_rosenfeld_flag, flag):
+    def canonical_coexistence(species, epsilonij, sigmaij, interaction_type_ij, sigmai_p,  grand_rosenfeld_flag, grand_meanfield_flag, flag):
         import numpy as np
         import json
         from scipy.integrate import quad
@@ -411,8 +415,8 @@ def calculator_coexistence_densities():
         
         
 
-    species, epsilonij, sigmaij, interaction_type_ij, sigmai_p, grand_rosenfeld_flag, flag =  data_reader()
-    mue, pressure, ftotal, densities = canonical_coexistence(species, epsilonij, sigmaij, interaction_type_ij, sigmai_p, grand_rosenfeld_flag, flag)
+    species, epsilonij, sigmaij, interaction_type_ij, sigmai_p, grand_rosenfeld_flag, grand_meanfield_flag, flag =  data_reader()
+    mue, pressure, ftotal, densities = canonical_coexistence(species, epsilonij, sigmaij, interaction_type_ij, sigmai_p, grand_rosenfeld_flag, grand_meanfield_flag, flag)
 
 
     densities_1 = [sp.symbols(f"rhoa_{i}") for i in range(len(sigmaij))]
@@ -606,14 +610,14 @@ def calculator_coexistence_densities():
                 # General constraint check (matches random_initial_guess())
                 def in_bounds(val, lo, hi):
                     return lo <= val <= hi
-
                 valid = in_bounds(rhot_a, 0.0, 1.0) and in_bounds(rhot_b, 0.0, 1.0)
-                valid = valid and in_bounds(x_a[0], 0.0, 0.4) and in_bounds(x_b[0], 0.6, 1.0)
+                if (len(x_a)>1):
+                    
+                    valid = valid and in_bounds(x_a[0], 0.0, 0.4) and in_bounds(x_b[0], 0.6, 1.0)
+                    for i in range(1, M):
+                        valid = valid and in_bounds(x_a[i], 0.0, 1.0) and in_bounds(x_b[i], 0.0, 1.0)
 
-                for i in range(1, M):
-                    valid = valid and in_bounds(x_a[i], 0.0, 1.0) and in_bounds(x_b[i], 0.0, 1.0)
-
-                valid = valid and in_bounds(p, 0.0, 1.0)
+                    valid = valid and in_bounds(p, 0.0, 1.0)
 
                 if valid:
                     rhoa = reduced_to_densities(reduced_a)
@@ -630,7 +634,7 @@ def calculator_coexistence_densities():
 
                     
 
-                    print("✅ Coexistence solution found and exported to the json file please open and check: and the pressure is given as", pressure_a, pressure_b)
+                    print("✅ Coexistence solution found according to the given bounds and exported to the json file please open and check: and the pressure is given as", pressure_a, pressure_b)
                     print(f"Phase A: rhot = {rhot_a:.4f}, x = {x_a}")
                     print(f"Phase B: rhot = {rhot_b:.4f}, x = {x_b}")
                     print(f"p = {p:.4f}")
@@ -669,4 +673,4 @@ def calculator_coexistence_densities():
     
     return result
 
-
+#calculator_coexistence_densities()

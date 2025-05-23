@@ -974,7 +974,7 @@ while (iteration < iteration_max):
             
     # exit(0)
     
-    for i in range(len(sigmai)):
+    for i in range(len(sigmaij)):
     
         free_energy = 0.0
             

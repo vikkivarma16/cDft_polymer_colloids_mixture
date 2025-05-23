@@ -9,7 +9,7 @@ space_confinement = abox
  
 # other options are like: abox, pcylinder, acylinder, asphere which is for the purpose of the aperiodic wall etc...
 
-box_extension = 10, 25, 45
+box_extension = 5, 25, 45
 
 box_points = 500, 100, 100
 
@@ -21,8 +21,8 @@ box_points = 500, 100, 100
 aperiodicity_blocker: wall
 # here you can also define "na", "NA" or "none"
 
-wall: particles = d
-wall: position  = (0, 0, 0), (10, 0, 0) 
+wall: particles = b
+wall: position  = (0, 0, 0), (5, 0, 0) 
 wall: orientation  = (1, 0, 0), (1, 0, 0)
 
 
@@ -31,9 +31,9 @@ wall: orientation  = (1, 0, 0), (1, 0, 0)
 
 particle_types = "cgrained"
 
-species =  a , b,  c 
+species =  a 
 
-species_canonical_fraction = 0.185185, 0.185185, 0.09259
+species_canonical_fraction = 0.7
 
 
 
@@ -47,17 +47,12 @@ species_canonical_fraction = 0.185185, 0.185185, 0.09259
 
 # primary interactions
 
-interaction: aa = gs,  sigma = 1.414, cutoff = 3.5, epsilon = 2.0
-interaction: ab = gs,  sigma = 1.414, cutoff = 3.5, epsilon = 2.5
-interaction: ac = gs,  sigma = 1.000, cutoff = 3.5, epsilon = -0.3575
-interaction: bb = gs,  sigma = 1.414, cutoff = 3.5, epsilon = 2.0
-interaction: cc = hc,  sigma = 0.95, cutoff = 5, epsilon = 2.0
+interaction: aa = gs,  sigma = 1.4, cutoff = 3.5, epsilon = 2.0
+
+#interaction: aa = hc,  sigma = 1., cutoff = 3.5, epsilon = 2.0
 
 
-
-wall_interaction: ad = custom_4,  sigma = 0.9333, cutoff = 3.2, epsilon=0.1 
-wall_interaction: bd = custom_4,  sigma = 0.9333, cutoff = 3.2, epsilon=0.1
-wall_interaction: cd = custom_4,  sigma = 0.9333, cutoff = 3.2, epsilon=0.1
+wall_interaction: ab = custom_4,  sigma = 0.9333, cutoff = 3.2, epsilon=0.1 
 
 
 # b is the wall particle 
@@ -66,10 +61,6 @@ wall_interaction: cd = custom_4,  sigma = 0.9333, cutoff = 3.2, epsilon=0.1
 
 #interaction: aa = wca,  sigma = 1.2, cutoff = 3.2, epsilon=1.0
 
-
-
-interaction: aa = ghc,  sigma = 0.95, cutoff = 3.2, epsilon=2
-interaction: bb = ghc,  sigma = 0.95, cutoff = 3.2, epsilon=2
 
 # thermodynamic properties
 

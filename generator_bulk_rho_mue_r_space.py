@@ -215,6 +215,7 @@ def bulk_rho_mue_r_space():
     i = 0 
     j = 0
     grand_rosenfeld_flag = 0
+    grand_meanfield_flag = 0
     
     for species_type, rho_value in species.items():
     
@@ -265,6 +266,7 @@ def bulk_rho_mue_r_space():
                 interaction_type_ij[i][j] = interaction_type
                 epsilonij[i][j] = epsilon
                 sigmaij[i][j] = sigma_ij
+                grand_meanfield_flag = 1
             
             j = j+1
 
@@ -313,6 +315,7 @@ def bulk_rho_mue_r_space():
                 interaction_type_ij[i][j] = interaction_type
                 epsilonij[i][j] = epsilon
                 sigmaij[i][j] = sigma_ij
+                grand_meanfield_flag = 1
                 
             j = j+1
                 
@@ -355,6 +358,7 @@ def bulk_rho_mue_r_space():
                 interaction_type_ij[i][j] = interaction_type
                 epsilonij[i][j] = epsilon
                 sigmaij[i][j] = sigma_ij
+                grand_meanfield_flag = 1
             j = j+1
         
         #print("mue before ideal", mue_total/temperature)
@@ -382,12 +386,11 @@ def bulk_rho_mue_r_space():
             
             
    
-               
-    valuemf = free_energy_mean_field(epsilonij, sigmaij, interaction_type_ij, rhos)
     
     
-    print(valuemf) 
- 
+    
+    if (grand_meanfield_flag == 1):  
+        valuemf = free_energy_mean_field(epsilonij, sigmaij, interaction_type_ij, rhos)
     
     sigmai = sigmai_p
     if (grand_rosenfeld_flag == 1):
@@ -395,45 +398,53 @@ def bulk_rho_mue_r_space():
         
     
     
-    print(valuehc)
+    
     
     bulk_mue =[]
-    
-    
     for i in range(len(species)):
-        bulk_mue.append(valuemf[i] + valuehc[i])
+        bulk_mue.append(0.0)
         
+    if (grand_meanfield_flag == 1):
+        for i in range(len(species)):
+            bulk_mue[i] += valuemf[i]
+   
+    if (grand_rosenfeld_flag == 1):
+        for i in range(len(species)):
+            bulk_mue[i] += valuehc[i]
         
-    secondary_valuemf = free_energy_mean_field(epsilonij, sigmaij, interaction_type_ij, secondary_rhos)
-    
-    print(secondary_valuemf)
     
     
+    
+    if (grand_meanfield_flag == 1):     
+        secondary_valuemf = free_energy_mean_field(epsilonij, sigmaij, interaction_type_ij, secondary_rhos)
+        
     sigmai = sigmai_p
     if (grand_rosenfeld_flag == 1):
         secondary_valuehc = hard_core_approach(sigmai, secondary_rhos, flag)
     
-    print(secondary_valuehc)
     
-    bulk_mue =[]
-    
-    
-    for i in range(len(species)):
-        bulk_mue.append(valuemf[i] + valuehc[i])
     
     
     secondary_bulk_mue =[]
-    
-    
     for i in range(len(species)):
-        secondary_bulk_mue.append(secondary_valuemf[i] + secondary_valuehc[i])
+        secondary_bulk_mue.append(0.0)
     
+    if (grand_meanfield_flag == 1):
+        for i in range(len(species)):
+            secondary_bulk_mue[i] += secondary_valuemf[i]
+    
+    if (grand_rosenfeld_flag == 1):
+        for i in range(len(species)):
+            secondary_bulk_mue[i] += secondary_valuehc[i]
+            
+            
     
     # Load r-space data
     r_space_data = np.loadtxt(r_space_file)
     
     
     
+   
     
     warning  = 0.0
     
@@ -527,4 +538,4 @@ def bulk_rho_mue_r_space():
     print(f"\n\n... uniform rho and mue with a phase interface has been assigned to each r space points and exported to the supplied data file section ...\n\n\n")
     
 # Run the function
-#bulk_rho_mue_r_space()
+# bulk_rho_mue_r_space()

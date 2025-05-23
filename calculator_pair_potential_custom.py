@@ -123,6 +123,24 @@ def pair_potential_custom_3(r, v_r, epsilon, sigma):
     
     
     
+def pair_potential_custom_4(r, v_r, epsilon, sigma):
+
+    EPSILON = 0.0001
+    
+    import numpy as np
+    
+
+
+    # Initialize the potential array
+    
+    # Calculate the WCA potential based on the distance
+    v_r[r <= sigma] = 200000000000
+    v_r[r > sigma] = 0  # Region 3: r > 5 * sigma
+    
+    return 0
+    
+    
+    
 def pair_potential_integrant_custom_3(r, v_r, epsilon, sigma):
 
     EPSILON = 0.0001
